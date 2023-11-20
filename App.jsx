@@ -1,61 +1,32 @@
 // Import necessary components from 'react-native'
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import DashboardScreen from './src/screens/DashboardScreen';
+import ClientScreen from './src/screens/ClientScreen';
+import InvoiceScreen from './src/screens/InvoiceScreen';
+import ProductScreen from './src/screens/ProductScreen';
 
-// Define a simple functional component for "Hello World"
-function HelloWorld() {
+const Tab = createBottomTabNavigator();
+
+function MyTabs() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text style={styles.sectionTitle}>Hello, World!</Text>
-    </View>
+    <Tab.Navigator>
+      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Client" component={ClientScreen} />
+      <Tab.Screen name="Invoice" component={InvoiceScreen} />
+      <Tab.Screen name="Product" component={ProductScreen} />
+    </Tab.Navigator>
   );
 }
 
 // Main App component
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
-    <SafeAreaView>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        >
-        {/* Replace the original content with the HelloWorld component */}
-        <HelloWorld />
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <MyTabs />
+    </NavigationContainer>
   );
 }
-
-// Styles from the original code
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
