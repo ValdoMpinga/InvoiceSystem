@@ -8,13 +8,15 @@ import ProductScreen from './src/screens/ProductScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 const Tab = createMaterialBottomTabNavigator();
-import { Colors } from './src/utils/contants';
+import {Provider} from 'react-redux';
+import Store from './redux/store';
+
+import {Colors} from './src/utils/contants';
 
 function MyTabs() {
   return (
     <Tab.Navigator
       initialRouteName="Dashboard"
-      
       activeColor={Colors.color2}
       inactiveColor={Colors.color4}
       barStyle={{backgroundColor: Colors.color1}}>
@@ -46,7 +48,7 @@ function MyTabs() {
         options={{
           tabBarIcon: ({color}) => (
             <FontAwesome6 name="file-invoice" color={color} size={25} />
-          ), 
+          ),
         }}
       />
       <Tab.Screen
@@ -69,9 +71,11 @@ function MyTabs() {
 // Main App component
 function App() {
   return (
-    <NavigationContainer>
-      <MyTabs />
-    </NavigationContainer>
+    <Provider store={Store}>
+      <NavigationContainer>
+        <MyTabs />
+      </NavigationContainer>
+    </Provider>
   );
 }
 
