@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setTestString, setShowCustomerModal} from '../../redux/invoiceStore';
 import {Colors} from '../utils/contants';
 import FloatingButton from '../components/FloatingButtons';
-import CustomerModal from '../components/invoice/CustomerModal';
 
 const InvoiceScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -23,7 +22,6 @@ const InvoiceScreen = ({navigation}) => {
         alignItems: 'center',
         backgroundColor: Colors.color5,
       }}>
-      <CustomerModal />
       <Text>InvoiceScreen {testString} </Text>
       <FloatingButton
         iconName={'file-invoice'}
