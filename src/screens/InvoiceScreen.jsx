@@ -8,7 +8,7 @@ import FloatingButton from '../components/FloatingButtons';
 const InvoiceScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
-  const {testString, showCustomerModal} = useSelector(state => state.invoice);
+  const {testString} = useSelector(state => state.invoice);
 
   useEffect(() => {
     navigation.navigate('WithoutTabs', {screen: 'InvoiceCreation'});
