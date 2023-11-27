@@ -1,22 +1,37 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import DashboardScreen from './src/screens/DashboardScreen';
-import ClientScreen from './src/screens/ClientScreen';
-import InvoiceScreen from './src/screens/InvoiceScreen';
-import ProductScreen from './src/screens/ProductScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-const Tab = createMaterialBottomTabNavigator();
 import {Provider} from 'react-redux';
 import Store from './redux/store';
 
 import {Colors} from './src/utils/contants';
+import DashboardScreen from './src/screens/DashboardScreen';
+import ClientScreen from './src/screens/ClientScreen';
+import InvoiceScreen from './src/screens/InvoiceScreen';
+import ProductScreen from './src/screens/ProductScreen';
+import InvoiceCreationScreen from './src/screens/InvoiceCreationScreen';
 
-function MyTabs() {
+const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
+
+// Stack for screens without tabs
+const WithoutTabsStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="InvoiceCreation" component={InvoiceCreationScreen} />
+      {/* Add more screens for this stack if needed */}
+    </Stack.Navigator>
+  );
+};
+
+// Stack for screens with tabs
+const WithTabsStack = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="Invoice"
       activeColor={Colors.color2}
       inactiveColor={Colors.color4}
       barStyle={{backgroundColor: Colors.color1}}>
@@ -66,14 +81,17 @@ function MyTabs() {
       />
     </Tab.Navigator>
   );
-}
+};
 
 // Main App component
 function App() {
   return (
     <Provider store={Store}>
       <NavigationContainer>
-        <MyTabs />
+        <Stack.Navigator headerMode="none">
+          <Stack.Screen name="Tabs" component={WithTabsStack} />
+          <Stack.Screen name="WithoutTabs" component={WithoutTabsStack} />
+        </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );

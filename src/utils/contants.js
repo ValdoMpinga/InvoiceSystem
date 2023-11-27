@@ -7,7 +7,11 @@ export const Colors = {
     color6:  '#B4BDFF',
     color7:  '#FFE3BB',
     color8:  '#FFD28F',
+    color9:  '#F5F5F5',
+    color10:  '#E6F7FF',
     white: 'white',
     black: 'black',
     // Add more color constants as needed
 };
+
+export const API_URL = "http://192.168.1.7:3000";
