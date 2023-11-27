@@ -6,7 +6,8 @@ const invoiceSlice = createSlice(
         initialState:
         {
             testString: "Something",
-            showCustomerModal: false
+            showCustomerModal: false,
+            productQuantities: {}
         },
         reducers: {
             setTestString(state, action)
@@ -17,10 +18,14 @@ const invoiceSlice = createSlice(
             {
                 state.showCustomerModal = action.payload
             },
+            setProductQuantities(state, action)
+            {
+                state.productQuantities = action.payload
+            },
         }
     }
 )
 
-export const { setTestString, setShowCustomerModal } = invoiceSlice.actions
+export const { setTestString, setShowCustomerModal, setProductQuantities } = invoiceSlice.actions
 
 export default invoiceSlice.reducer

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   FlatList,
@@ -8,33 +8,53 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Colors} from '../utils/contants';
+import {setProductQuantities} from '../../redux/invoiceStore';
+import {useDispatch, useSelector} from 'react-redux';
 
 const ProductList = ({data}) => {
+  const dispatch = useDispatch();
+  const {productQuantities} = useSelector(state => state.invoice);
+
   useEffect(() => {
     console.log(data);
-  });
+  }, []);
 
   const handleSubtractQuantity = item => {
-    // Your logic for subtracting quantity
-    // Ensure the quantity doesn't go below 0
-    const updatedQuantity = Math.max(0, item.quantity - 1);
-    // Perform your logic with the updated quantity
-    console.log(`Subtracting quantity for ${item.name}: ${updatedQuantity}`);
+    const currentQuantity = productQuantities[item.id] || 0;
+    if (currentQuantity > 0) {
+      dispatch(
+        setProductQuantities({
+          ...productQuantities,
+          [item.id]: currentQuantity - 1,
+        }),
+      );
+    }
   };
 
   const handleAddQuantity = item => {
-    // Your logic for adding quantity
-    // Perform your logic with the updated quantity
-    console.log(`Adding quantity for ${item.name}: ${item.quantity + 1}`);
+    const currentQuantity = productQuantities[item.id] || 0;
+    dispatch(
+      setProductQuantities({
+        ...productQuantities,
+        [item.id]: currentQuantity + 1,
+      }),
+    );
   };
 
   const renderItem = ({item, index}) => {
     const isEven = index % 2 === 0;
     const backgroundColor = isEven ? Colors.color9 : Colors.color10;
 
+    const quantity = productQuantities[item.id] || 0;
+
     return (
       <View style={[styles.itemContainer, {backgroundColor}]}>
-        <Image source={{uri: item.image}} style={styles.image} />
+        <Image
+          source={{
+            uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.CJVIUZGoFUidosxyFLpQFQHaEx%26pid%3DApi&f=1&ipt=168a637c20eaef943716150abdd8fd74de92b38e6009a88af5d7e0ba4d327331&ipo=images',
+          }}
+          style={styles.image}
+        />
         <View style={styles.textContainer}>
           <Text style={styles.productText}>{item.name}</Text>
           <Text style={styles.text}>€{item.unit_price}</Text>
@@ -43,7 +63,7 @@ const ProductList = ({data}) => {
           <TouchableOpacity onPress={() => handleSubtractQuantity(item)}>
             <Text style={styles.quantityButton}>-</Text>
           </TouchableOpacity>
-          <Text style={styles.quantityValue}>0</Text>
+          <Text style={styles.quantityValue}>{quantity}</Text>
           <TouchableOpacity onPress={() => handleAddQuantity(item)}>
             <Text style={styles.quantityButton}>+</Text>
           </TouchableOpacity>
@@ -67,7 +87,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
-    // borderBottomColor: '#ccc',
   },
   image: {
     width: 50,
@@ -88,9 +107,14 @@ const styles = StyleSheet.create({
   },
   quantityContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
+
     alignItems: 'center',
   },
   quantityButton: {
+    width:30,
+    height: 30,
+    paddingLeft:10,
     fontSize: 20, // Increased font size for +/- buttons
     color: Colors.black, // Add your preferred color
     fontWeight: 'bold',
@@ -101,5 +125,4 @@ const styles = StyleSheet.create({
     color: Colors.black, // Add your preferred color
   },
 });
-
 export default ProductList;
