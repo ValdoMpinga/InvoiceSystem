@@ -19,8 +19,7 @@ const InvoiceCreationScreen = () => {
   const {customers, productQuantities} = useSelector(state => state.invoice);
   let emailsArray = [];
 
-    const dispatch = useDispatch();
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -42,7 +41,7 @@ const InvoiceCreationScreen = () => {
         console.error('Error:', error.message);
         setError(error.message);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -60,16 +59,14 @@ const InvoiceCreationScreen = () => {
 
         let data = await response.json();
 
-        console.log(data.customers.data);
         emailsArray = data.customers.data.map(item => item.email);
 
-        console.log(emailsArray);
         dispatch(setCustomers(emailsArray));
       } catch (error) {
         console.error('Error:', error.message);
         setError(error.message);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -104,8 +101,7 @@ const InvoiceCreationScreen = () => {
         <SelectDropdown
           data={customers}
           search={true}
-          onSelect={(selectedItem, index) =>
-          {
+          onSelect={(selectedItem, index) => {
             setSelectedCustomer(selectedItem);
             console.log(selectedItem, index);
           }}
@@ -127,10 +123,38 @@ const InvoiceCreationScreen = () => {
           customTextStyle={{color: Colors.black, fontSize: 18}}
           customButtonStyle={{backgroundColor: Colors.color1}}
           title={'Create'}
-          onPress={() =>
-          {
-            console.log(productQuantities);
-            console.log(selectedCustomer);
+          onPress={() => {
+            let postProducts = {
+              customer_email: selectedCustomer,
+              products: [],
+              is_payed: true,
+            };
+
+            for (const [key, value] of Object.entries(productQuantities)) {
+              postProducts.products.push({
+                product_id: key,
+                product_quantity: value,
+              });
+            }
+
+            let endpoint = API_URL + '/invoice/create';
+
+            fetch(endpoint, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(postProducts),
+            })
+              .then(response => response.json())
+              .then(data => {
+                // Handle the response data here
+                console.log(data);
+              })
+              .catch(error => {
+                // Handle errors here
+                console.error('Error:', error);
+              });
           }}
         />
       </View>
