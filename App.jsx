@@ -13,7 +13,7 @@ import ClientScreen from './src/screens/ClientScreen';
 import InvoiceScreen from './src/screens/InvoiceScreen';
 import ProductScreen from './src/screens/ProductScreen';
 import InvoiceCreationScreen from './src/screens/InvoiceCreationScreen';
-import DraftInvoiceScreen from './src/screens/DraftInvoiceScreen';
+import InvoiceViewScreen from './src/screens/InvoiceViewScreen';
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -22,7 +22,7 @@ const WithoutTabsStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="InvoiceCreation" component={InvoiceCreationScreen} />
-      <Stack.Screen name="DraftInvoice" component={DraftInvoiceScreen} />
+      <Stack.Screen name="InvoiceView" component={InvoiceViewScreen} />
       {/* Add more screens for this stack if needed */}
     </Stack.Navigator>
   );

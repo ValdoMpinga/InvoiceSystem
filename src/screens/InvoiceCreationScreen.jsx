@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setCustomers} from '../../redux/invoiceStore';
 import CustomButton from '../components/CustomButton';
 
+
 const screenWidth = Dimensions.get('window').width;
 
 const InvoiceCreationScreen = ({navigation}) => {
@@ -16,7 +17,8 @@ const InvoiceCreationScreen = ({navigation}) => {
   const [selectedCustomer, setSelectedCustomer] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const {customers, productQuantities} = useSelector(state => state.invoice);
+  const { customers, productQuantities } = useSelector(state => state.invoice);
+  
 
 
   let emailsArray = [];
@@ -74,7 +76,6 @@ const InvoiceCreationScreen = ({navigation}) => {
 
     fetchProducts();
     fetchCustomers();
-
   }, []);
 
   const handleSearch = query => {
@@ -150,17 +151,21 @@ const InvoiceCreationScreen = ({navigation}) => {
               body: JSON.stringify(postProducts),
             });
 
-            console.log('before checking response status ');
-
             if (!response.ok) {
               console.log('some error occured');
               throw new Error('Failed to retrieve draft invoice');
             }
 
-            console.log(response.json());
-     
+            const responseData = await response.json();
+            const insertedInvoiceId = responseData.inserted_invoice_id;
+
+            console.log(insertedInvoiceId);
+
             navigation.navigate('WithoutTabs', {
-              screen: 'DraftInvoice',
+              screen: 'InvoiceView',
+              params: {
+                insertedInvoiceId: insertedInvoiceId,
+              },
             });
           }}
         />

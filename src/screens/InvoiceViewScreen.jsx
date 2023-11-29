@@ -3,9 +3,12 @@ import {View, StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
 import Pdf from 'react-native-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import {API_URL} from '../utils/contants';
+import {useRoute} from '@react-navigation/native';
 
-const DraftInvoiceScreen = () => {
+const InvoiceViewScreen = () => {
   const [pdfUri, setPdfUri] = useState('');
+  const route = useRoute();
+  const insertedInvoiceId = route.params?.insertedInvoiceId;
 
   useEffect(() => {
     // Replace 'YOUR_SERVER_ENDPOINT' with the actual URL of your Node.js server
@@ -17,7 +20,7 @@ const DraftInvoiceScreen = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({invoice_id: 84}),
+      body: JSON.stringify({invoice_id: insertedInvoiceId}),
     })
       .then(response => response.text())
       .then(base64String => {
@@ -40,8 +43,8 @@ const DraftInvoiceScreen = () => {
 
   if (!pdfUri) {
     return (
-      <View>
-        <ActivityIndicator size="large" color="#00ff00" />
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
@@ -79,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DraftInvoiceScreen;
+export default InvoiceViewScreen;
