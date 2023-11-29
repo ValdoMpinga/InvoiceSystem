@@ -26,6 +26,11 @@ const InvoiceCreationScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+
+    fetchProducts();
+    fetchCustomers();
+  }, []);
+
     const fetchProducts = async () => {
       try {
         let endpoint = API_URL + '/product/get';
@@ -73,10 +78,6 @@ const InvoiceCreationScreen = ({navigation}) => {
         // setLoading(false);
       }
     };
-
-    fetchProducts();
-    fetchCustomers();
-  }, []);
 
   const handleSearch = query => {
     const filtered = products.filter(product =>
