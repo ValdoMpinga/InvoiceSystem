@@ -11,12 +11,14 @@ import CustomButton from '../components/CustomButton';
 
 const screenWidth = Dimensions.get('window').width;
 
-const InvoiceCreationScreen = () => {
+const InvoiceCreationScreen = ({navigation}) => {
   const [products, setProducts] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const {customers, productQuantities} = useSelector(state => state.invoice);
+
+
   let emailsArray = [];
 
   const dispatch = useDispatch();
@@ -72,6 +74,7 @@ const InvoiceCreationScreen = () => {
 
     fetchProducts();
     fetchCustomers();
+
   }, []);
 
   const handleSearch = query => {
@@ -123,7 +126,7 @@ const InvoiceCreationScreen = () => {
           customTextStyle={{color: Colors.black, fontSize: 18}}
           customButtonStyle={{backgroundColor: Colors.color1}}
           title={'Create'}
-          onPress={() => {
+          onPress={async () => {
             let postProducts = {
               customer_email: selectedCustomer,
               products: [],
@@ -139,22 +142,26 @@ const InvoiceCreationScreen = () => {
 
             let endpoint = API_URL + '/invoice/create';
 
-            fetch(endpoint, {
+            const response = await fetch(endpoint, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify(postProducts),
-            })
-              .then(response => response.json())
-              .then(data => {
-                // Handle the response data here
-                console.log(data);
-              })
-              .catch(error => {
-                // Handle errors here
-                console.error('Error:', error);
-              });
+            });
+
+            console.log('before checking response status ');
+
+            if (!response.ok) {
+              console.log('some error occured');
+              throw new Error('Failed to retrieve draft invoice');
+            }
+
+            console.log(response.json());
+     
+            navigation.navigate('WithoutTabs', {
+              screen: 'DraftInvoice',
+            });
           }}
         />
       </View>
