@@ -51,10 +51,12 @@ const renderItem = ({item, index}) => {
     <View style={[styles.itemContainer, {backgroundColor}]}>
       <Image
         source={{
-          uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.CJVIUZGoFUidosxyFLpQFQHaEx%26pid%3DApi&f=1&ipt=168a637c20eaef943716150abdd8fd74de92b38e6009a88af5d7e0ba4d327331&ipo=images',
+          uri: item.url,
         }}
         style={styles.image}
+        onError={error => console.error('Image load error:', error)}
       />
+
       <View style={styles.textContainer}>
         <Text style={styles.productText}>{item.name}</Text>
         <Text style={styles.text}>€{item.unit_price}</Text>

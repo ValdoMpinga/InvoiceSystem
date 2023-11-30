@@ -8,13 +8,10 @@ import {
   Dimensions,
 } from 'react-native';
 const windowWidth = Dimensions.get('window').width;
-import { Colors } from '../utils/contants';
+import {Colors} from '../utils/contants';
 
-const InvoiceList = ({invoicesData}) => {
-  useEffect(() => {
-    console.log('here');
-    console.log(invoicesData);
-  }, [invoicesData]); // Add invoicesData as a dependency
+const InvoiceList = ({navigation,invoicesData}) => {
+  useEffect(() => {}, [invoicesData]); // Add invoicesData as a dependency
 
   const renderInvoiceItem = ({item}) => {
     // Convert the emissionDate string to a JavaScript Date object
@@ -32,7 +29,17 @@ const InvoiceList = ({invoicesData}) => {
 
     return (
       <View style={styles.card}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+          {
+            console.log("passing id: ",item.id);
+            navigation.navigate('WithoutTabs', {
+              screen: 'InvoiceView',
+              params: {
+                insertedInvoiceId: item.id,
+              },
+            });
+          }}>
           <Text style={styles.title}>Invoice Status: {item.status}</Text>
           <Text>Emission Date: {formattedDate}</Text>
           <Text>Total Amount: {item.totalAmount}</Text>

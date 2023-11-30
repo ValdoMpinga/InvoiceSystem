@@ -5,6 +5,7 @@ import InvoiceList from '../components/InvoiceList';
 import {API_URL} from '../utils/contants';
 import {Colors} from '../utils/contants';
 import Loading from '../components/Loading';
+import FloatingButton from '../components/FloatingButtons';
 
 const InvoiceScreen = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,9 +46,12 @@ const InvoiceScreen = ({navigation}) => {
             },
           );
 
+          console.log("bellow invoice data");
+          console.log(invoice);
           const customerObj = await customerResponse.json();
 
           return {
+            id: invoice.id,
             status: 'Paid',
             emissionDate: invoice.emission_data,
             totalAmount: invoice.total_amount,
@@ -80,7 +84,7 @@ const InvoiceScreen = ({navigation}) => {
       ) : (
         <View style={{flex: 1, padding: 16, backgroundColor: Colors.color5}}>
           <Searchbar
-            style={{backgroundColor: "grey"}}
+            style={{backgroundColor: 'grey'}}
             placeholder="Search"
             onChangeText={query => {
               setSearchQuery(query);
@@ -91,6 +95,14 @@ const InvoiceScreen = ({navigation}) => {
 
           <InvoiceList
             invoicesData={searchQuery.length > 0 ? filteredInvoices : invoices}
+            navigation={navigation}
+          />
+          <FloatingButton
+            iconName={'file-invoice'}
+            onButtonClick={() => {
+              console.log('ya');
+              navigation.navigate('WithoutTabs', {screen: 'InvoiceCreation'});
+            }}
           />
         </View>
       )}

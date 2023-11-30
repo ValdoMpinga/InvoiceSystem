@@ -9,7 +9,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setCustomers} from '../../redux/invoiceStore';
 import CustomButton from '../components/CustomButton';
 
-
 const screenWidth = Dimensions.get('window').width;
 
 const InvoiceCreationScreen = ({navigation}) => {
@@ -74,9 +73,7 @@ const InvoiceCreationScreen = ({navigation}) => {
       } catch (error) {
         console.error('Error:', error.message);
         setError(error.message);
-      } finally {
-        // setLoading(false);
-      }
+      } 
     };
 
   const handleSearch = query => {

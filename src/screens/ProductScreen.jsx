@@ -60,8 +60,7 @@ const ProductScreen = () => {
           <Loading color={Colors.color1} />
         </View>
       ) : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>ProductScreen</Text>
+        <View style={styles.container}>
           <View style={styles.productContainer}>
             <View style={styles.searchBarView}>
               <Searchbar
@@ -84,7 +83,7 @@ const ProductScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.color1,
+    backgroundColor: Colors.color8,
   },
   productContainer: {
     flex: 1,
