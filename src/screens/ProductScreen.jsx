@@ -35,9 +35,7 @@ const ProductScreen = () =>
       } catch (error) {
         console.error('Error:', error.message);
         setError(error.message);
-      } finally {
-        // setLoading(false);
-      }
+      } 
     };
 
     const handleSearch = query => {

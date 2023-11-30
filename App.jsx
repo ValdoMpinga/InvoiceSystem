@@ -32,7 +32,8 @@ const WithoutTabsStack = () => {
 const WithTabsStack = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Invoice"
+      // initialRouteName="Invoice"
+      initialRouteName="Dashboard"
       activeColor={Colors.color2}
       inactiveColor={Colors.color4}
       barStyle={{backgroundColor: Colors.color1}}>
