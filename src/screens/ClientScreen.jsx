@@ -74,10 +74,13 @@ const ClientScreen = () => {
   return (
     <>
       {isCustomersLoading ? (
-        <Loading color={Colors.color7} />
+        <View style={{flex: 1, padding: 16, backgroundColor: Colors.color7}}>
+          <Loading color={Colors.color1} />
+        </View>
       ) : (
         <View style={{flex: 1, padding: 16, backgroundColor: Colors.color7}}>
           <Searchbar
+            style={{backgroundColor: 'grey'}}
             placeholder="Search"
             onChangeText={query => {
               setSearchQuery(query);

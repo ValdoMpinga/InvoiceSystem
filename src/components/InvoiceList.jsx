@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 const windowWidth = Dimensions.get('window').width;
+import { Colors } from '../utils/contants';
 
 const InvoiceList = ({invoicesData}) => {
   useEffect(() => {
@@ -52,8 +53,8 @@ const InvoiceList = ({invoicesData}) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: windowWidth/1.2,
-    backgroundColor: 'red',
+    width: windowWidth / 1.2,
+    backgroundColor: Colors.color1,
     padding: 15,
     margin: 10,
     borderRadius: 8,

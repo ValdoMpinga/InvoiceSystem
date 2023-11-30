@@ -1,90 +1,100 @@
-import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {setTestString, setShowCustomerModal} from '../../redux/invoiceStore';
-import {Colors} from '../utils/contants';
-import FloatingButton from '../components/FloatingButtons';
+import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
+import {Searchbar} from 'react-native-paper';
 import InvoiceList from '../components/InvoiceList';
 import {API_URL} from '../utils/contants';
+import {Colors} from '../utils/contants';
+import Loading from '../components/Loading';
 
 const InvoiceScreen = ({navigation}) => {
-  const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [invoices, setInvoices] = useState([]);
-
-  const {testString} = useSelector(state => state.invoice);
+  const [isInvoicesLoading, setIsInvoicesLoading] = useState(true);
 
   useEffect(() => {
     fetchInvoices();
   }, []);
 
-const fetchInvoices = async () => {
-  try
-  {
-    const response = await fetch(`${API_URL}/invoice/get-invoice-list`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  const fetchInvoices = async () => {
+    try {
+      const response = await fetch(`${API_URL}/invoice/get-invoice-list`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (!response.ok) {
-      console.error('Failed to fetch invoices');
-      return;
+      if (!response.ok) {
+        console.error('Failed to fetch invoices');
+        return;
+      }
+
+      const data = await response.json();
+
+      const invoicesArray = await Promise.all(
+        data.invoices.map(async invoice => {
+          const customerResponse = await fetch(
+            `${API_URL}/customer/get-by-id`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({customer_id: invoice.customer_id}),
+            },
+          );
+
+          const customerObj = await customerResponse.json();
+
+          return {
+            status: 'Paid',
+            emissionDate: invoice.emission_data,
+            totalAmount: invoice.total_amount,
+            customerEmail: customerObj.customer.email,
+          };
+        }),
+      );
+
+      setInvoices(invoicesArray);
+      setIsInvoicesLoading(false);
+    } catch (error) {
+      console.error('Error fetching invoices:', error);
+      // Handle error, maybe set an error state
     }
+  };
 
-    const data = await response.json();
-
-    // Use Promise.all to wait for all asynchronous operations to complete
-    const invoicesArray = await Promise.all(
-      data.invoices.map(async invoice => {
-        const customerResponse = await fetch(`${API_URL}/customer/get-by-id`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({customer_id: invoice.customer_id}),
-        });
-
-        const customerObj = await customerResponse.json();
-
-        return {
-          status: 'Paid',
-          emissionDate: invoice.emission_data,
-          totalAmount: invoice.total_amount,
-          customerEmail: customerObj.customer.email,
-        };
-      }),
+  const handleSearch = query => {
+    const filtered = invoices.filter(invoice =>
+      invoice.customerEmail.toLowerCase().startsWith(query.toLowerCase()),
     );
-
-    // Log the content of invoicesArray
-    console.log('Invoices Array:', invoicesArray);
-
-    // Set the state with the new invoicesArray
-    setInvoices(invoicesArray);
-  } catch (error) {
-    console.error('Error fetching invoices:', error);
-    // Handle error, maybe set an error state
-  }
-};
-
-
+    setFilteredInvoices(filtered);
+  };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: Colors.color5,
-      }}>
-      <InvoiceList invoicesData={invoices} />
-      <FloatingButton
-        iconName={'file-invoice'}
-        onButtonClick={() => {
-          navigation.navigate('WithoutTabs', {screen: 'InvoiceCreation'});
-        }}
-      />
-    </View>
+    <>
+      {isInvoicesLoading ? (
+        <View style={{flex: 1, padding: 16, backgroundColor: Colors.color5}}>
+          <Loading color={Colors.color1} />
+        </View>
+      ) : (
+        <View style={{flex: 1, padding: 16, backgroundColor: Colors.color5}}>
+          <Searchbar
+            style={{backgroundColor: "grey"}}
+            placeholder="Search"
+            onChangeText={query => {
+              setSearchQuery(query);
+              handleSearch(query); // Call handleSearch directly while typing
+            }}
+            value={searchQuery}
+          />
+
+          <InvoiceList
+            invoicesData={searchQuery.length > 0 ? filteredInvoices : invoices}
+          />
+        </View>
+      )}
+    </>
   );
 };
 

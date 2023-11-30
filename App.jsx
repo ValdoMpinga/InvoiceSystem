@@ -33,7 +33,7 @@ const WithTabsStack = () => {
   return (
     <Tab.Navigator
       // initialRouteName="Invoice"
-      initialRouteName="Dashboard"
+      initialRouteName="Client"
       activeColor={Colors.color2}
       inactiveColor={Colors.color4}
       barStyle={{backgroundColor: Colors.color1}}>
@@ -90,7 +90,7 @@ function App() {
   return (
     <Provider store={Store}>
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
+        <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="Tabs" component={WithTabsStack} />
           <Stack.Screen name="WithoutTabs" component={WithoutTabsStack} />
         </Stack.Navigator>

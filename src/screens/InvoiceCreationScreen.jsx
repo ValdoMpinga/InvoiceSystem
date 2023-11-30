@@ -99,7 +99,7 @@ const InvoiceCreationScreen = ({navigation}) => {
           />
         </View>
         <View style={styles.productListView}>
-          <ProductList data={filteredProducts} />
+          <ProductList data={filteredProducts} displayButtons={true} />
         </View>
       </View>
       <View style={styles.customerContainer}>
