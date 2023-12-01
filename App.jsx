@@ -6,6 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import {Provider} from 'react-redux';
 import Store from './redux/store';
+import ProductCreationScreen from './src/screens/ProductCreationScreen';
 
 import {Colors} from './src/utils/contants';
 import DashboardScreen from './src/screens/DashboardScreen';
@@ -23,6 +24,7 @@ const WithoutTabsStack = () => {
     <Stack.Navigator>
       <Stack.Screen name="InvoiceCreation" component={InvoiceCreationScreen} />
       <Stack.Screen name="InvoiceView" component={InvoiceViewScreen} />
+      <Stack.Screen name="ProductCreation" component={ProductCreationScreen} />
       {/* Add more screens for this stack if needed */}
     </Stack.Navigator>
   );

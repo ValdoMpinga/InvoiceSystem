@@ -6,12 +6,18 @@ import {API_URL} from '../utils/contants';
 import {Colors} from '../utils/contants';
 import Loading from '../components/Loading';
 import FloatingButton from '../components/FloatingButtons';
+import { setInvoices } from '../../redux/invoiceStore';
+import {useDispatch, useSelector} from 'react-redux';
 
 const InvoiceScreen = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredInvoices, setFilteredInvoices] = useState([]);
-  const [invoices, setInvoices] = useState([]);
+  // const [invoices, setInvoices] = useState([]);
   const [isInvoicesLoading, setIsInvoicesLoading] = useState(true);
+
+    const {invoices} = useSelector(state => state.invoice);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchInvoices();
@@ -59,11 +65,10 @@ const InvoiceScreen = ({navigation}) => {
         }),
       );
 
-      setInvoices(invoicesArray);
+      dispatch(setInvoices(invoicesArray));
       setIsInvoicesLoading(false);
     } catch (error) {
       console.error('Error fetching invoices:', error);
-      // Handle error, maybe set an error state
     }
   };
 

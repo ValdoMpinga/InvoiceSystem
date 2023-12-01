@@ -5,14 +5,19 @@ import {API_URL} from '../utils/contants';
 import {Colors} from '../utils/contants';
 import {Searchbar} from 'react-native-paper';
 import Loading from '../components/Loading';
+import FloatingButton from '../components/FloatingButtons';
+import {useDispatch, useSelector} from 'react-redux';
+import {setProducts} from '../../redux/invoiceStore';
 
 const screenWidth = Dimensions.get('window').width;
 
-const ProductScreen = () => {
-  const [products, setProducts] = useState([]);
+const ProductScreen = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const {products, productQuantities} = useSelector(state => state.invoice);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchProducts();
@@ -31,9 +36,9 @@ const ProductScreen = () => {
 
       let data = await response.json();
 
-      setProducts(data.products.data);
+      dispatch(setProducts(data.products.data));
       setFilteredProducts(data.products.data);
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
       console.error('Error:', error.message);
       setError(error.message);
@@ -41,9 +46,11 @@ const ProductScreen = () => {
   };
 
   const handleSearch = query => {
+    console.log('Original products:', products);
     const filtered = products.filter(product =>
       product.name.toLowerCase().includes(query.toLowerCase()),
     );
+    console.log('Filtered products:', filtered);
     setFilteredProducts(filtered);
     setSearchQuery(query);
   };
@@ -64,15 +71,26 @@ const ProductScreen = () => {
           <View style={styles.productContainer}>
             <View style={styles.searchBarView}>
               <Searchbar
-              style={styles.searchBar}
+                style={styles.searchBar}
                 placeholder="Search"
                 onChangeText={handleSearch}
                 value={searchQuery}
               />
             </View>
             <View style={styles.productListView}>
-              <ProductList data={filteredProducts} displayButtons={false} />
+              <ProductList data={products} displayButtons={true} />
             </View>
+            <FloatingButton
+              iconName={'plus'}
+              onButtonClick={() => {
+                navigation.navigate('WithoutTabs', {
+                  screen: 'ProductCreation',
+                  params: {
+                    navigation: navigation,
+                  },
+                });
+              }}
+            />
           </View>
         </View>
       )}
@@ -86,10 +104,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.color8,
   },
   productContainer: {
-    flex: 1,
+    flex: 0.90,
   },
   customerContainer: {
-    flex: 1,
+    flex: 0.90,
     backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
@@ -107,7 +125,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     width: screenWidth / 1.25,
-    backgroundColor: "grey",
+    backgroundColor: 'grey',
     color: Colors.black,
   },
   productListView: {

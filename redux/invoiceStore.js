@@ -9,12 +9,14 @@ const invoiceSlice = createSlice(
             showCustomerModal: false,
             productQuantities: {},
             customers: {},
+            products: [],
+            invoices: []
         },
         reducers: {
             setTestString(state, action)
             {
                 state.testString = action.payload
-            }, 
+            },
             setShowCustomerModal(state, action)
             {
                 state.showCustomerModal = action.payload
@@ -27,10 +29,18 @@ const invoiceSlice = createSlice(
             {
                 state.customers = action.payload
             },
+            setProducts(state, action)
+            {
+                state.products = action.payload
+            },
+            setInvoices(state, action)
+            {
+                state.invoices = action.payload
+            },
         }
     }
 )
 
-export const { setTestString, setShowCustomerModal, setProductQuantities, setCustomers } = invoiceSlice.actions
+export const { setTestString, setShowCustomerModal, setProductQuantities, setProducts, setCustomers, setInvoices } = invoiceSlice.actions
 
 export default invoiceSlice.reducer

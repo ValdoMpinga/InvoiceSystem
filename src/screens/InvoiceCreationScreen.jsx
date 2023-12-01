@@ -6,7 +6,12 @@ import ProductList from '../components/ProductList';
 import {Searchbar} from 'react-native-paper';
 import SelectDropdown from 'react-native-select-dropdown';
 import {useDispatch, useSelector} from 'react-redux';
-import {setCustomers, setProductQuantities} from '../../redux/invoiceStore';
+import {
+  setCustomers,
+  setProductQuantities,
+  setProducts,
+  setInvoices
+} from '../../redux/invoiceStore';
 import CustomButton from '../components/CustomButton';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Loading from '../components/Loading';
@@ -14,16 +19,16 @@ import Loading from '../components/Loading';
 const screenWidth = Dimensions.get('window').width;
 
 const InvoiceCreationScreen = ({navigation}) => {
-  const [products, setProducts] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const {customers, productQuantities} = useSelector(state => state.invoice);
+  const {customers, productQuantities, products} = useSelector(
+    state => state.invoice,
+  );
   const [isDataLoading, setIsDataLoading] = useState(true);
 
-  let emailsArray = [];
-
   const dispatch = useDispatch();
+  let emailsArray = [];
 
   useEffect(() => {
     fetchProducts();
@@ -43,13 +48,11 @@ const InvoiceCreationScreen = ({navigation}) => {
 
       let data = await response.json();
 
-      setProducts(data.products.data);
+      dispatch(setProducts(data.products.data));
       setFilteredProducts(data.products.data);
     } catch (error) {
       console.error('Error:', error.message);
       setError(error.message);
-    } finally {
-      // setLoading(false);
     }
   };
 
@@ -76,6 +79,53 @@ const InvoiceCreationScreen = ({navigation}) => {
       setError(error.message);
     }
   };
+
+   const fetchInvoices = async () => {
+     try {
+       const response = await fetch(`${API_URL}/invoice/get-invoice-list`, {
+         method: 'GET',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+       });
+
+       if (!response.ok) {
+         console.error('Failed to fetch invoices');
+         return;
+       }
+
+       const data = await response.json();
+
+       const invoicesArray = await Promise.all(
+         data.invoices.map(async invoice => {
+           const customerResponse = await fetch(
+             `${API_URL}/customer/get-by-id`,
+             {
+               method: 'POST',
+               headers: {
+                 'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({customer_id: invoice.customer_id}),
+             },
+           );
+
+           const customerObj = await customerResponse.json();
+
+           return {
+             id: invoice.id,
+             status: 'Paid',
+             emissionDate: invoice.emission_data,
+             totalAmount: invoice.total_amount,
+             customerEmail: customerObj.customer.email,
+           };
+         }),
+       );
+
+       dispatch(setInvoices(invoicesArray));
+     } catch (error) {
+       console.error('Error fetching invoices:', error);
+     }
+   };
 
   const handleSearch = query => {
     const filtered = products.filter(product =>
@@ -144,7 +194,7 @@ const InvoiceCreationScreen = ({navigation}) => {
                     'Please select a customer and add some products.',
                     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
                   );
-                  setIsDataLoading(false)
+                  setIsDataLoading(false);
                 } else {
                   for (const [key, value] of Object.entries(
                     productQuantities,
@@ -175,6 +225,8 @@ const InvoiceCreationScreen = ({navigation}) => {
 
                   console.log(insertedInvoiceId);
 
+                  await fetchInvoices()
+                  
                   navigation.navigate('WithoutTabs', {
                     screen: 'InvoiceView',
                     params: {
@@ -182,8 +234,8 @@ const InvoiceCreationScreen = ({navigation}) => {
                     },
                   });
                   setIsDataLoading(false);
-                  setSelectedCustomer(null)
-                  setProductQuantities({})
+                  setSelectedCustomer(null);
+                  dispatch(setProductQuantities({}));
                 }
               }}
             />

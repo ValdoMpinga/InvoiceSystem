@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Dimensions, BackHandler} from 'react-native';
+import {View, StyleSheet, Dimensions} from 'react-native';
 import Pdf from 'react-native-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import {API_URL} from '../utils/contants';
@@ -14,21 +14,7 @@ const InvoiceViewScreen = () => {
 
   useEffect(() =>
   {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-
-        navigation.navigate('Invoice'); // Replace 'Home' with the screen you want to navigate to
-        return true; // Prevent default behavior (closing the app)
-      },
-    );
-
     getInvoicePdf();
-
-
-    return () => {
-      backHandler.remove();
-    };
   }, []);
 
   const getInvoicePdf = async () => {
