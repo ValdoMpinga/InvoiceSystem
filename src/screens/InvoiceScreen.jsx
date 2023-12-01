@@ -46,8 +46,7 @@ const InvoiceScreen = ({navigation}) => {
             },
           );
 
-          console.log("bellow invoice data");
-          console.log(invoice);
+
           const customerObj = await customerResponse.json();
 
           return {

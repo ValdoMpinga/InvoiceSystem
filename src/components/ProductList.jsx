@@ -16,7 +16,6 @@ const ProductList = ({data, displayButtons}) => {
   const {productQuantities} = useSelector(state => state.invoice);
 
   useEffect(() => {
-    console.log(data);
   }, []);
 
   const handleSubtractQuantity = item => {
