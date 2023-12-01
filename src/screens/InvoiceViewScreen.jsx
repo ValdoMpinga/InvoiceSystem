@@ -1,20 +1,39 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, Dimensions, BackHandler} from 'react-native';
 import Pdf from 'react-native-pdf';
 import RNFetchBlob from 'rn-fetch-blob';
 import {API_URL} from '../utils/contants';
-import {useRoute} from '@react-navigation/native';
+import {useRoute, useNavigation} from '@react-navigation/native';
+import {WaveIndicator} from 'react-native-indicators';
 
 const InvoiceViewScreen = () => {
   const [pdfUri, setPdfUri] = useState('');
   const route = useRoute();
   const insertedInvoiceId = route.params?.insertedInvoiceId;
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    // Replace 'YOUR_SERVER_ENDPOINT' with the actual URL of your Node.js server
+  useEffect(() =>
+  {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+
+        navigation.navigate('Invoice'); // Replace 'Home' with the screen you want to navigate to
+        return true; // Prevent default behavior (closing the app)
+      },
+    );
+
+    getInvoicePdf();
+
+
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
+
+  const getInvoicePdf = async () => {
     const serverEndpoint = `${API_URL}/invoice/get`;
 
-    console.log(serverEndpoint);
     fetch(serverEndpoint, {
       method: 'POST',
       headers: {
@@ -39,12 +58,12 @@ const InvoiceViewScreen = () => {
       .catch(error => {
         console.error('Error fetching PDF:', error);
       });
-  }, []);
+  };
 
   if (!pdfUri) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <WaveIndicator size={100} color="#0000ff" />
       </View>
     );
   }

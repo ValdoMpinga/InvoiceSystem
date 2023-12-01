@@ -1,7 +1,7 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-import {Colors} from '../utils/contants';
-import {PacmanIndicator} from 'react-native-indicators';
+import { PacmanIndicator } from 'react-native-indicators';
+
 const Loading = ({color}) => {
   return (
     <View
@@ -19,7 +19,7 @@ const Loading = ({color}) => {
           }}>
           Loading...
         </Text> */}
-        <PacmanIndicator size={60} color={color} />
+        <PacmanIndicator size={100} color={color} />
       </View>
     </View>
   );
