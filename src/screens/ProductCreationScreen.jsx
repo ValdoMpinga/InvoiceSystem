@@ -1,19 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet, Alert, LogBox} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import {Colors} from '../utils/contants';
 import CustomButton from '../components/CustomButton';
 import {API_URL} from '../utils/contants';
 import {useDispatch, useSelector} from 'react-redux';
-import {setProducts} from '../../redux/invoiceStore';
+import { setProducts } from '../../redux/invoiceStore';
+
+LogBox.ignoreAllLogs(true);
 
 const ProductCreationScreen = ({navigation}) => {
-  const [productName, setProductName] = useState('Paw Paw');
-  const [productCost, setProductCost] = useState(0.99);
+  const [productName, setProductName] = useState(null);
+  const [productCost, setProductCost] = useState(null);
   const [productUrl, setProductUrl] = useState(
-    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.explicit.bing.net%2Fth%3Fid%3DOIP.xRYpNCL-903rjURIuxRVUQHaEL%26pid%3DApi&f=1&ipt=1b220dfe84bca43e8b7e6e9e82b77d21d8768c50c4eca6fd7c12081f2ccce276&ipo=images',
+    'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.kuuvX_PMA1yeIAV5kNam6QHaE6%26pid%3DApi&f=1&ipt=2a2f926ceece32b0bca54ab1406543ef5749da37dd1d27f5311773703b48fb5f&ipo=images',
   );
-  const [productDescription, setProductDescription] = useState('Fruit');
+  const [productDescription, setProductDescription] = useState(null);
 
   const {products} = useSelector(state => state.invoice);
 
@@ -78,9 +80,8 @@ const ProductCreationScreen = ({navigation}) => {
       {
         text: 'OK',
         onPress: async () => {
-
           navigation.navigate('Tabs', {
-            screen: 'Product',
+            screen: 'Products',
           });
         },
       },

@@ -6,12 +6,20 @@ const CustomButton = ({
   customButtonStyle,
   customTextStyle,
   textStyle,
-}) => {
+}) =>
+{
+   const handlePress = () => {
+     if (typeof onPress === 'function') {
+       onPress();
+     }
+   };
+
+  
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       style={[styles.button, customButtonStyle]}
-      onPress={onPress}>
+      onPress={handlePress}>
       <Text style={[styles.text, customTextStyle]}>{title}</Text>
     </TouchableOpacity>
   );

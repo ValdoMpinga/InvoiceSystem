@@ -52,7 +52,7 @@ const InvoiceList = ({navigation,invoicesData}) => {
   return (
     <FlatList
       data={invoicesData}
-      keyExtractor={invoice => invoice.status.toString()}
+      keyExtractor={invoice => invoice.id.toString()}
       renderItem={renderInvoiceItem}
     />
   );

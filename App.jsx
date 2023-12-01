@@ -1,4 +1,5 @@
 import React from 'react';
+import {LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -17,6 +18,7 @@ import InvoiceCreationScreen from './src/screens/InvoiceCreationScreen';
 import InvoiceViewScreen from './src/screens/InvoiceViewScreen';
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
+
 
 // Stack for screens without tabs
 const WithoutTabsStack = () => {
@@ -53,7 +55,7 @@ const WithTabsStack = () => {
         }}
       />
       <Tab.Screen
-        name="Client"
+        name="Customers"
         component={ClientScreen}
         options={{
           tabBarIcon: ({color}) => (
@@ -62,7 +64,7 @@ const WithTabsStack = () => {
         }}
       />
       <Tab.Screen
-        name="Invoice"
+        name="Invoices"
         component={InvoiceScreen}
         options={{
           tabBarIcon: ({color}) => (
@@ -71,7 +73,7 @@ const WithTabsStack = () => {
         }}
       />
       <Tab.Screen
-        name="Product"
+        name="Products"
         component={ProductScreen}
         options={{
           tabBarIcon: ({color}) => (

@@ -19,7 +19,8 @@ const ProductScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     fetchProducts();
   }, []);
 
@@ -70,6 +71,19 @@ const ProductScreen = ({navigation}) => {
         <View style={styles.container}>
           <View style={styles.productContainer}>
             <View style={styles.searchBarView}>
+              <Text
+                style={{
+                  color: Colors.black,
+                  fontSize: 30,
+                  fontWeight: 'bold',
+                  alignSelf: 'flex-start',
+                  marginLeft: 20,
+                  marginTop: 20,
+                  fontFamily: 'monospace',
+                }}>
+                Products
+              </Text>
+
               <Searchbar
                 style={styles.searchBar}
                 placeholder="Search"
@@ -78,20 +92,20 @@ const ProductScreen = ({navigation}) => {
               />
             </View>
             <View style={styles.productListView}>
-              <ProductList data={products} displayButtons={true} />
+              <ProductList data={products} displayButtons={false} />
             </View>
-            <FloatingButton
-              iconName={'plus'}
-              onButtonClick={() => {
-                navigation.navigate('WithoutTabs', {
-                  screen: 'ProductCreation',
-                  params: {
-                    navigation: navigation,
-                  },
-                });
-              }}
-            />
           </View>
+          <FloatingButton
+            iconName={'plus'}
+            onButtonClick={() => {
+              navigation.navigate('WithoutTabs', {
+                screen: 'ProductCreation',
+                params: {
+                  navigation: navigation,
+                },
+              });
+            }}
+          />
         </View>
       )}
     </>
@@ -101,13 +115,14 @@ const ProductScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.color8,
+    backgroundColor: Colors.color4,
   },
   productContainer: {
-    flex: 0.90,
+    flex: 1,
+    marginBottom:160
   },
   customerContainer: {
-    flex: 0.90,
+    flex: 1,
     backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
@@ -127,6 +142,7 @@ const styles = StyleSheet.create({
     width: screenWidth / 1.25,
     backgroundColor: 'grey',
     color: Colors.black,
+    marginTop: 20,
   },
   productListView: {
     marginTop: 30,

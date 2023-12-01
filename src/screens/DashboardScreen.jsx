@@ -1,7 +1,7 @@
 // DashboardScreen.js
 
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import DashboardItem from '../components/DashboardItem';
 import {Colors} from '../utils/contants';
 import Loading from '../components/Loading';
@@ -21,7 +21,7 @@ const DashboardScreen = () => {
     dashboardDataSetter();
   }, []);
 
-  dashboardDataSetter = async () => {
+  const dashboardDataSetter = async () => {
     let customerCount = await dashboardDataFetcher(customersCountEndpoint);
     setClientsCount(customerCount);
 
@@ -31,7 +31,7 @@ const DashboardScreen = () => {
     let invoiceCount = await dashboardDataFetcher(invoicesCountEndpoint);
     setInvoicesCount(invoiceCount);
 
-    setIsDataLoading(false)
+    setIsDataLoading(false);
   };
 
   async function dashboardDataFetcher(endpoint) {
@@ -52,40 +52,46 @@ const DashboardScreen = () => {
       {isDataLoading ? (
         <Loading color={Colors.color1} />
       ) : (
-        <View style={styles.innerContainer}>
-          <DashboardItem
-            title="Clients"
-            number={clientsCount}
-            iconName="persons"
-            iconColor="black"
-            color="#3498db"
-          />
+        <>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: 30,
+              fontWeight: 'bold',
+              alignSelf: 'flex-start',
+              marginLeft: 20,
+              marginTop: 20,
+              fontFamily: 'monospace',
+            }}>
+            Dashboard
+          </Text>
 
-          <DashboardItem
-            title="Products"
-            number={productsCount}
-            iconName="list-2"
-            iconColor="black"
-            color="#2ecc71"
-          />
+          <View style={styles.innerContainer}>
+            <DashboardItem
+              title="Clients"
+              number={clientsCount}
+              iconName="persons"
+              iconColor="black"
+              color="#3498db"
+            />
 
-          <DashboardItem
-            title="Invoices"
-            number={invoicesCount}
-            iconName="file-1"
-            iconColor="black"
-            color="#f39c12"
-          />
+            <DashboardItem
+              title="Products"
+              number={productsCount}
+              iconName="list-2"
+              iconColor="black"
+              color="#2ecc71"
+            />
 
-          <DashboardItem
-            title="Something..."
-            number={20}
-            iconName="shopping-package"
-            iconColor="black"
-            color="#e74c3c"
-          />
-          {/* Add more DashboardItem components as needed */}
-        </View>
+            <DashboardItem
+              title="Invoices"
+              number={invoicesCount}
+              iconName="file-1"
+              iconColor="black"
+              color="#f39c12"
+            />
+          </View>
+        </>
       )}
     </View>
   );
@@ -94,16 +100,16 @@ const DashboardScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+
     backgroundColor: Colors.color3,
   },
   innerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center', // Center items vertically
+    justifyContent: 'center', // Center horizontally
     flexWrap: 'wrap',
     padding: 10,
-    alignItems: 'center', // Center items vertically
+    marginTop: 130
   },
 });
 

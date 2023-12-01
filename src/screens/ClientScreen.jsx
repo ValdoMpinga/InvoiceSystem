@@ -1,5 +1,3 @@
-// ClientScreen.js
-
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {Searchbar} from 'react-native-paper';
@@ -79,16 +77,28 @@ const ClientScreen = () => {
         </View>
       ) : (
         <View style={{flex: 1, padding: 16, backgroundColor: Colors.color7}}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: 30,
+              fontWeight: 'bold',
+              alignSelf: 'flex-start',
+              marginLeft: 20,
+              marginTop: 20,
+              fontFamily: 'monospace',
+            }}>
+            Customers
+          </Text>
+
           <Searchbar
-            style={{backgroundColor: 'grey'}}
-            placeholder="Search"
+            style={{backgroundColor: 'grey', marginTop: 30}}
+            placeholder="Search Customer By Email"
             onChangeText={query => {
               setSearchQuery(query);
               handleSearch(query); // Call handleSearch directly while typing
             }}
             value={searchQuery}
           />
-
           <ClientList
             data={searchQuery.length > 0 ? filteredClients : customers}
           />

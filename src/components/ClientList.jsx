@@ -1,7 +1,7 @@
 // ClientList.js
 
 import React, {useEffect} from 'react';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 
 const ClientList = ({ data }) =>
 {
@@ -10,12 +10,14 @@ const ClientList = ({ data }) =>
         
     },[])
   const renderItem = ({item}) => (
-    <View style={styles.card}>
-      <Text style={styles.cardText}>Email: {item.email}</Text>
-      <Text style={styles.cardText}>Country: {item.country}</Text>
-      <Text style={styles.cardText}>City: {item.city}</Text>
-      <Text style={styles.cardText}>Number of Invoices: {item.invoices}</Text>
-    </View>
+    <TouchableOpacity>
+      <View style={styles.card}>
+        <Text style={styles.cardText}>Email: {item.email}</Text>
+        <Text style={styles.cardText}>Country: {item.country}</Text>
+        <Text style={styles.cardText}>City: {item.city}</Text>
+        <Text style={styles.cardText}>Number of Invoices: {item.invoices}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -30,7 +32,7 @@ const ClientList = ({ data }) =>
 
 const styles = StyleSheet.create({
   list: {
-    marginTop: 10,
+    marginTop: 30,
   },
   card: {
     backgroundColor: '#ffffff',
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginTop:20
   },
     cardText: {
       color: "black",
